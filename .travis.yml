@@ -24,6 +24,7 @@ matrix:
       before_install:
         - cd cmd/
         - go mod download
+        - ls -al
 
       script:
         - go test -v ./...

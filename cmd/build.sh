@@ -110,7 +110,9 @@ else
     echo "Building ${filename}:${build_version} for detected ${platform} platform..."
 fi
 
+echo "Go Path : $PATH"
 go_executable=$(which go)
+echo "Which GO : $go_executable"
 if [[ -x "$go_executable" ]] ; then
     echo "Go found in \$PATH"
 else
