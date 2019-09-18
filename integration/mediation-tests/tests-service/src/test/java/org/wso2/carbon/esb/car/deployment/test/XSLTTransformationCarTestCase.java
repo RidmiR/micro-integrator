@@ -46,10 +46,10 @@ public class XSLTTransformationCarTestCase extends ESBIntegrationTest {
         String carbonHome = System.getProperty(ServerConstants.CARBON_HOME);
         String sourcePath = carbonHome + File.separator + "registry";
 
-        Assert.assertTrue(registryManager.checkResourceExist(sourcePath,"/config/", registryResource1),"Registry resources not found");
-        log.info(registryResource1 + "Registry resources found");
-        Assert.assertTrue(registryManager.checkResourceExist(sourcePath,"config/", registryResource2), "Registry resources not found");
-        log.info(registryResource2 + "Registry resources found");
+        Assert.assertTrue(registryManager.checkResourceExist("conf:/", registryResource1),"Registry resources not found");
+        log.info(registryResource1 + " Registry resources found");
+        Assert.assertTrue(registryManager.checkResourceExist("conf:/", registryResource2), "Registry resources not found");
+        log.info(registryResource2 + " Registry resources found");
 
     }
 
