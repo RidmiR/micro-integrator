@@ -18,63 +18,25 @@
 
 package org.wso2.carbon.esb.cli;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import util.TestUtils;
 
 public class CliEndpointTestCase {
-    protected Log log = LogFactory.getLog(CliEndpointTestCase.class);
-    TestUtils testUtils = new TestUtils();
-    String line = null;
-    private static final String cliTestEp = "SimpleEP";
-    private static final String cliStockEp = "SimpleStockQuoteServiceEndpoint";
 
-    /**
-     * setup the environment to run the tests
-     */
-    @BeforeClass
-    public void setupEnv() throws IOException {
-
-        Process process;
-        String[] setup = { "sh", ".."+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"EnvSetup.sh"};
-        process = Runtime.getRuntime().exec(setup);
-
-        try (BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            while ((line = bufferedreader.readLine()) != null) {
-                log.info(line);
-            }
-        }
-    }
+    private static final String CLI_TEST_EP = "SimpleEP";
+    private static final String CLI_STOCK_EP = "SimpleStockQuoteServiceEndpoint";
 
     /**
      * Get information about all the Endpoints
      */
     @Test
-    public void miShowEndpointAllTest() throws IOException {
+    public void miShowEndpointAllTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(), "endpoint", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestEp)),cliTestEp +" Endpoint not found");
-            log.info(cliTestEp + " Endpoint Found");
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliStockEp)),cliStockEp + "Endpoint not found");
-            log.info(cliStockEp + " Endpoint Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommand("endpoint" ,"show");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_EP)), CLI_TEST_EP +" Endpoint not found");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_STOCK_EP)), CLI_STOCK_EP + "Endpoint not found");
     }
 
     /**
@@ -82,37 +44,20 @@ public class CliEndpointTestCase {
      */
 
     @Test
-    public void miShowEndpointTest() throws IOException {
+    public void miShowEndpointTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "endpoint", "show", cliTestEp).getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestEp)),cliTestEp +" Endpoint not found");
-            log.info(cliTestEp + " Endpoint Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommandWithArtifactName("endpoint" ,"show", CLI_TEST_EP);
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_EP)), CLI_TEST_EP +" Endpoint not found");
     }
 
     /**
      * Test un-deployed Endpoint
      */
     @Test
-    public void miShowEndpointNotFoundTest() throws IOException {
+    public void miShowEndpointNotFoundTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "endpoint", "show", "CLITestEP").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("Endpoint 404 Not Found")),"Endpoint 404 Not Found");
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines = TestUtils.runCLICommandWithArtifactName("endpoint", "show", "CLITestEP");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("Endpoint 404 Not Found")), "Endpoint 404 Not Found");
     }
+
 }

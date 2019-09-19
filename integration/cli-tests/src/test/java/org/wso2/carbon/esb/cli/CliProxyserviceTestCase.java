@@ -18,102 +18,44 @@
 
 package org.wso2.carbon.esb.cli;
 
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import java.io.*;
-import org.apache.commons.logging.Log;
-import java.util.ArrayList;
 import java.util.List;
 import util.TestUtils;
 
 public class CliProxyserviceTestCase {
 
-    protected Log log = LogFactory.getLog(CliProxyserviceTestCase.class);
-    String line = null;
-    TestUtils testUtils = new TestUtils();
-    private static final String cliAddressProxy = "cliAddressProxy";
-    private static final String cliTestProxy = "cliTestProxy";
-
-    /**
-     * setup the environment to run the tests
-     */
-    @BeforeClass
-    public void setupEnv() throws IOException {
-
-        Process process;
-        String[] setup = { "sh", ".."+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"EnvSetup.sh"};
-        process = Runtime.getRuntime().exec(setup);
-
-        try (BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            while ((line = bufferedreader.readLine()) != null) {
-                log.info(line);
-            }
-        }
-    }
+    private static final String CLI_ADDRESS_PROXY = "cliAddressProxy";
+    private static final String CLI_TEST_PROXY = "cliTestProxy";
 
     /**
      * Get information about all the Proxy services
      */
-
     @Test
-    public void miShowProxyAllTest() throws IOException {
+    public void miShowProxyAllTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(),"proxyservice", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestProxy)),cliTestProxy + " Proxy service not found");
-            log.info(cliTestProxy + " Proxy service Found");
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliAddressProxy)),cliAddressProxy + " Proxy service not found");
-            log.info(cliAddressProxy + " Proxy service Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommand("proxyservice" ,"show");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_PROXY)), CLI_TEST_PROXY + " Proxy service not found");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_ADDRESS_PROXY)), CLI_ADDRESS_PROXY + " Proxy service not found");
     }
 
     /**
      * Get information about single proxy service
      */
-
     @Test
-    public void miShowProxyTest() throws IOException {
+    public void miShowProxyTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "proxyservice", "show", cliTestProxy).getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestProxy)),cliTestProxy + " Proxy service not found");
-            log.info(cliTestProxy + " Proxy service Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommandWithArtifactName("proxyservice" ,"show", CLI_TEST_PROXY);
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_PROXY)), CLI_TEST_PROXY + " Proxy service not found");
     }
 
     /**
      * Test un-deployed proxy service
      */
-
     @Test
-    public void miShowProxyNotFoundTest() throws IOException {
+    public void miShowProxyNotFoundTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "proxyservice", "show", "CliTestProxy").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("ProxyService 404 Not Found")),"ProxyService 404 Not Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines = TestUtils.runCLICommandWithArtifactName("proxyservice", "show", "CliTestProxy");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("ProxyService 404 Not Found")), "ProxyService 404 Not Found");
     }
 }

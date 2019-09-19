@@ -24,18 +24,19 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.wso2.carbon.esb.cli.CliAPITestCase;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestUtils {
-    protected Log log = LogFactory.getLog(CliAPITestCase.class);
-    File miBuildFilePath;
-    String miPath;
+
+    private static final Log log = LogFactory.getLog(TestUtils.class);
+    static File miBuildFilePath;
+    static String miPath;
 
 
 //     get pom version from the pom file
-    public String getPomVerion() throws IOException, XmlPullParserException {
+    public static String getPomVerion() throws IOException, XmlPullParserException {
 
         MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model = reader.read(new FileReader("../pom.xml"));
@@ -44,7 +45,7 @@ public class TestUtils {
     }
 
 //    get the mi build path to run mi commands
-    public String getMIBuildPath() {
+    public static  String getMIBuildPath() {
         try {
             TestUtils testUtils = new TestUtils();
             miBuildFilePath = new File(".." + File.separator + ".." + File.separator + ".." + File.separator
@@ -60,11 +61,43 @@ public class TestUtils {
         return miPath;
     }
 
+   public static List<String> runCLICommand(String artifact , String command ){
+
+        List<String> lines = new ArrayList();
+        String  line;
+
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(TestUtils.runMiCommand(
+                TestUtils.getMIBuildPath(),artifact ,command ).getInputStream()))) {
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            log.info("Exception occurred while running the command :  " + command + " for artifact : " + artifact  + " . Exception : "  + e.getMessage());
+        }
+        return lines;
+    }
+
+    public static List<String> runCLICommandWithArtifactName(String artifact , String command, String name ){
+
+        List<String> lines = new ArrayList();
+        String  line;
+
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(TestUtils.runMiCommandWithArtifact(
+                TestUtils.getMIBuildPath(),artifact ,command ,name ).getInputStream()))) {
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            log.info("Exception occurred while running the command :  " + command + " for artifact : " + artifact  + " . Exception : "  + e.getMessage());
+        }
+        return lines;
+    }
+
     /**
      * run the mi commands
      * ex: mi sequence show
      */
-    public Process runMiCommand(String path, String artifact, String command) throws IOException {
+    public static Process runMiCommand(String path, String artifact, String command) throws IOException {
         ProcessBuilder builder = new ProcessBuilder(path, artifact, command);
         Process process = builder.start();
         return process;
@@ -74,11 +107,12 @@ public class TestUtils {
      * run the mi commands with the artifact name
      * ex: mi sequence show sampleSequence
      */
-    public Process runMiCommandWithArtifact(String path, String artifact, String command, String name) throws IOException {
+    public static  Process runMiCommandWithArtifact(String path, String artifact, String command, String name) throws IOException {
         ProcessBuilder builder = new ProcessBuilder(path, artifact, command, name);
         Process process = builder.start();
         return process;
     }
+
 
 }
 

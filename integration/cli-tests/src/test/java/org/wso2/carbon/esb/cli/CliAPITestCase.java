@@ -17,44 +17,15 @@
  */
 
 package org.wso2.carbon.esb.cli;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import util.TestUtils;
 
 public class CliAPITestCase {
 
-    protected Log log = LogFactory.getLog(CliAPITestCase.class);
-    String line = null;
-    TestUtils testUtils = new TestUtils();
-    private static final String cliSampleApi_1 = "cliSampleApi_1";
-    private static final String cliSampleApi_2 = "cliSampleApi_2";
-
-    /**
-     * setup the environment to run the tests
-     */
-    @BeforeClass
-    public void setupEnv() throws IOException {
-
-        Process process;
-        String[] setup = { "sh", ".."+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"EnvSetup.sh"};
-        process = Runtime.getRuntime().exec(setup);
-
-        try (BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            while ((line = bufferedreader.readLine()) != null) {
-                log.info(line);
-            }
-        }
-    }
+    private static final String CLI_SAMPLE_API_1 = "cliSampleApi_1";
+    private static final String CLI_SAMPLE_API_2 = "cliSampleApi_2";
 
     /**
      * Get information about all the API's
@@ -62,58 +33,28 @@ public class CliAPITestCase {
     @Test
     public void miShowAllApiTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(),"api" ,"show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliSampleApi_1)),cliSampleApi_1+" API not found");
-            log.info(cliSampleApi_1 + " API Found");
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliSampleApi_2)),cliSampleApi_2+" API not found");
-            log.info(cliSampleApi_2 + " API Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommand("api" ,"show");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_SAMPLE_API_1)),CLI_SAMPLE_API_1+" API not found");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_SAMPLE_API_2)),CLI_SAMPLE_API_2+" API not found");
     }
 
-
-        /**
-         * Get information about single API's
-         */
+    /**
+     * Get information about single API's
+     */
     @Test
-    public void miShowApiTest() throws IOException {
+    public void miShowApiTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "api", "show", cliSampleApi_1).getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliSampleApi_1)),cliSampleApi_1 +" API not found");
-            log.info(cliSampleApi_1 + " API Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommandWithArtifactName("api" ,"show", CLI_SAMPLE_API_1);
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_SAMPLE_API_1)), CLI_SAMPLE_API_1 +" API not found");
     }
 
     /**
      * Test Un-deployed API
      */
     @Test
-    public void miShowApiNotFoundTest() throws IOException {
+    public void miShowApiNotFoundTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "api", "show", "TestAPI").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("API 404 Not Found")),"API 404 Not Found");
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommandWithArtifactName("api" ,"show", "TestAPI");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("API 404 Not Found")),"API 404 Not Found");
     }
 }

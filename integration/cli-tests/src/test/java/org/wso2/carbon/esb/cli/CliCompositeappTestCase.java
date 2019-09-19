@@ -18,64 +18,26 @@
 
 package org.wso2.carbon.esb.cli;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import util.TestUtils;
 
 public class CliCompositeappTestCase {
 
-    protected Log log = LogFactory.getLog(CliEndpointTestCase.class);
-    String line = null;
-    TestUtils testUtils = new TestUtils();
-    private static final String cliTestHelloCar = "hello-worldCompositeApplication";
-    private static final String cliTestMediatorCar = "MediatorCApp";
+    private static final String CLI_TEST_HELLO_CAR = "hello-worldCompositeApplication";
+    private static final String CLI_TEST_MEDIATOR_CAR = "MediatorCApp";
 
-    /**
-     * setup the environment to run the tests
-     */
-    @BeforeClass
-    public void setupEnv() throws IOException {
-
-        Process process;
-        String[] setup = { "sh", ".."+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"EnvSetup.sh"};
-        process = Runtime.getRuntime().exec(setup);
-
-        try (BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            while ((line = bufferedreader.readLine()) != null) {
-                log.info(line);
-            }
-        }
-    }
     /**
      * Get information about all the carbon applications
      */
 
     @Test
-    public void miShowCarbonappAllTest() throws IOException {
+    public void miShowCarbonappAllTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(),"compositeapp", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestHelloCar)),cliTestHelloCar +" Carbon application not found");
-            log.info(cliTestHelloCar + " Carbon application Found");
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestMediatorCar)),cliTestMediatorCar + " Carbon application not found");
-            log.info(cliTestMediatorCar + " Carbon application Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommand("compositeapp" ,"show");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_HELLO_CAR)), CLI_TEST_HELLO_CAR +" Carbon application not found");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_MEDIATOR_CAR)), CLI_TEST_MEDIATOR_CAR + " Carbon application not found");
     }
 
     /**
@@ -83,37 +45,19 @@ public class CliCompositeappTestCase {
      */
 
     @Test
-    public void miShowCarbonappTest() throws IOException {
+    public void miShowCarbonappTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "compositeapp", "show", cliTestHelloCar).getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestHelloCar)),cliTestHelloCar +" Carbon application not Found");
-            log.info(cliTestHelloCar + " Carbon application Found");
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommandWithArtifactName("compositeapp" ,"show", CLI_TEST_HELLO_CAR);
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_HELLO_CAR)), CLI_TEST_HELLO_CAR +" Carbon application not Found");
     }
 
     /**
      * Test un-deployed Carbon application
      */
     @Test
-    public void miShowCappNotFoundTest() throws IOException {
+    public void miShowCappNotFoundTest() {
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommandWithArtifact(
-                testUtils.getMIBuildPath(), "compositeapp", "show", "TestCapp").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("Carbon App 404 Not Found")),"Carbon App 404 Not Found");
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommandWithArtifactName("compositeapp" ,"show", "TestCapp");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("Carbon App 404 Not Found")),"Carbon App 404 Not Found");
     }
 }

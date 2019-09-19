@@ -22,12 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import util.TestUtils;
 
@@ -35,30 +30,11 @@ public class CliRemoteTestCase {
 
     protected Log log = LogFactory.getLog(CliRemoteTestCase.class);
     ProcessBuilder builder = null;
-    ProcessBuilder builderShow = null;
-    TestUtils testUtils = new TestUtils();
-    String line = null;
-    private static final String cliTestRemoteServer = "TestServer";
-    private static final String remoteHost = "192.168.1.15";
-    private static final String getRemoteHostUpdate = "192.168.1.17";
-    private static final String remotePort = "9164";
+    private static final String CLI_TEST_REMOTE_SERVER = "TestServer";
+    private static final String REMOTE_HOST = "192.168.1.15";
+    private static final String GET_REMOTE_HOST_UPDATE = "192.168.1.17";
+    private static final String REMOTE_PORT = "9164";
 
-    /**
-     * setup the environment to run the tests
-     */
-    @BeforeClass
-    public void setupEnv() throws IOException {
-
-        Process process;
-        String[] setup = { "sh", ".."+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"EnvSetup.sh"};
-        process = Runtime.getRuntime().exec(setup);
-
-        try (BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            while ((line = bufferedreader.readLine()) != null) {
-                log.info(line);
-            }
-        }
-    }
 
     /**
      * Test to add a Micro Integrator server
@@ -66,21 +42,11 @@ public class CliRemoteTestCase {
     @Test(priority=1)
     public void miAddRemoteServer() throws IOException {
 
-        builder = new ProcessBuilder(testUtils.getMIBuildPath(), "remote" , "add", cliTestRemoteServer, remoteHost, remotePort);
+        builder = new ProcessBuilder(TestUtils.getMIBuildPath(), "remote" , "add", CLI_TEST_REMOTE_SERVER, REMOTE_HOST, REMOTE_PORT);
         builder.start();
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(), "remote", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(cliTestRemoteServer))," - Fail to add remote server -"+cliTestRemoteServer);
-            log.info("Successfully added remote server - "+cliTestRemoteServer);
-        }
-        catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommand("remote" ,"show");
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_REMOTE_SERVER))," - Fail to add remote server - "+ CLI_TEST_REMOTE_SERVER);
     }
 
     /**
@@ -89,21 +55,13 @@ public class CliRemoteTestCase {
     @Test(priority=2)
     public void miUpdateRemoteServer() throws IOException {
 
-        builder = new ProcessBuilder(testUtils.getMIBuildPath(), "remote" , "update", cliTestRemoteServer, getRemoteHostUpdate, remotePort);
+        builder = new ProcessBuilder(TestUtils.getMIBuildPath(), "remote" , "update", CLI_TEST_REMOTE_SERVER, GET_REMOTE_HOST_UPDATE, REMOTE_PORT);
         builder.start();
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(), "remote", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(getRemoteHostUpdate)),"Fail to Update host of the remote server of "+cliTestRemoteServer);
-            log.info("Successfully update host of the remote server of " +cliTestRemoteServer);
+        List<String> lines =  TestUtils.runCLICommand("remote" ,"show");
 
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains(GET_REMOTE_HOST_UPDATE)),"Fail to Update host of the remote server of "+ CLI_TEST_REMOTE_SERVER);
+        log.info("Successfully update host of the remote server of " + CLI_TEST_REMOTE_SERVER);
     }
 
     /**
@@ -112,21 +70,13 @@ public class CliRemoteTestCase {
     @Test(priority=3)
     public void miSelectRemoteServer() throws IOException {
 
-        builder = new ProcessBuilder(testUtils.getMIBuildPath(), "remote" , "select", cliTestRemoteServer);
+        builder = new ProcessBuilder(TestUtils.getMIBuildPath(), "remote" , "select", CLI_TEST_REMOTE_SERVER);
         builder.start();
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(), "remote", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("current_server: "+cliTestRemoteServer)),"Fail to select "+cliTestRemoteServer+" as current remote server");
-            log.info("Successfully select "+cliTestRemoteServer+" as current remote server");
+        List<String> lines =  TestUtils.runCLICommand("remote" ,"show");
 
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        Assert.assertTrue(lines.stream().anyMatch(str -> str.trim().contains("current_server: "+ CLI_TEST_REMOTE_SERVER)),"Fail to select "+ CLI_TEST_REMOTE_SERVER +" as current remote server");
+        log.info("Successfully select "+ CLI_TEST_REMOTE_SERVER +" as current remote server");
     }
 
     /**
@@ -135,20 +85,11 @@ public class CliRemoteTestCase {
     @Test(priority=4)
     public void miRemoveRemoteServer() throws IOException {
 
-        builder = new ProcessBuilder(testUtils.getMIBuildPath(), "remote" , "remove", cliTestRemoteServer);
+        builder = new ProcessBuilder(TestUtils.getMIBuildPath(), "remote" , "remove", CLI_TEST_REMOTE_SERVER);
         builder.start();
 
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(testUtils.runMiCommand(
-                testUtils.getMIBuildPath(), "remote", "show").getInputStream()))) {
-            List<String> lines = new ArrayList();
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            Assert.assertNotEquals(lines.stream().anyMatch(str -> str.trim().contains(cliTestRemoteServer)),"Fail to remove "+cliTestRemoteServer);
-            log.info("Successfully remove "+cliTestRemoteServer);
-
-        } catch (IOException e) {
-            log.info("Exception = " + e.getMessage());
-        }
+        List<String> lines =  TestUtils.runCLICommand("remote" ,"show");
+        Assert.assertNotEquals(lines.stream().anyMatch(str -> str.trim().contains(CLI_TEST_REMOTE_SERVER)),"Fail to remove "+ CLI_TEST_REMOTE_SERVER);
+        log.info("Successfully remove "+ CLI_TEST_REMOTE_SERVER);
     }
 }
