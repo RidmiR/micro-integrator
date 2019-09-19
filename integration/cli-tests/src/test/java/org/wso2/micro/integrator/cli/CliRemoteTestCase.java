@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.esb.cli;
+package org.wso2.micro.integrator.cli;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

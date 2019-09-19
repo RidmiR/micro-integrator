@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.esb.cli;
+package org.wso2.micro.integrator.cli;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,18 +27,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * setup the environment to run the tests
+ * Setup the environment to run the tests
  */
 
 public class CliEnviornmentSetup {
 
-    String line = null;
     private static final Log log = LogFactory.getLog(CliEnviornmentSetup.class);
 
     @BeforeSuite
     public void setupEnv() throws IOException {
 
         Process process;
+        String line;
         String[] setup = { "sh", ".."+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"EnvSetup.sh"};
         process = Runtime.getRuntime().exec(setup);
 

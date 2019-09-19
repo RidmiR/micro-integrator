@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.esb.cli;
+package org.wso2.micro.integrator.cli;
 
 import util.TestUtils;
 import org.testng.Assert;
