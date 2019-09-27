@@ -38,9 +38,9 @@ public class SendIntegrationEndpointAtConfigRegistryTestCase extends ESBIntegrat
     @BeforeClass(alwaysRun = true)
     public void uploadSynapseConfig() throws Exception {
         super.init();
-        resourceAdminServiceStub = new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
-                context.getContextTenant().getContextUser().getUserName(),
-                context.getContextTenant().getContextUser().getPassword());
+//        resourceAdminServiceStub = new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
+//                context.getContextTenant().getContextUser().getUserName(),
+//                context.getContextTenant().getContextUser().getPassword());
         uploadResourcesToConfigRegistry();
         loadESBConfigurationFromClasspath("/artifacts/ESB/synapseconfig/send_mediator/synapse_config.xml");
     }
@@ -60,18 +60,18 @@ public class SendIntegrationEndpointAtConfigRegistryTestCase extends ESBIntegrat
         new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
                 context.getContextTenant().getContextUser().getUserName(),
                 context.getContextTenant().getContextUser().getPassword());
-        resourceAdminServiceStub.deleteResource("/_system/config/endpoints");
-        resourceAdminServiceStub.addCollection("/_system/config/", "endpoints", "", "Contains test endpoint files");
-        resourceAdminServiceStub
-                .addResource("/_system/config/endpoints/registry_endpoint.xml", "application/xml", "xml files",
-                        setEndpoints(new DataHandler(new URL("file:///" + getESBResourceLocation()
-                                + "/synapseconfig/send_mediator/endpoints/registry_endpoint.xml"))));
+//        resourceAdminServiceStub.deleteResource("/_system/config/endpoints");
+//        resourceAdminServiceStub.addCollection("/_system/config/", "endpoints", "", "Contains test endpoint files");
+//        resourceAdminServiceStub
+//                .addResource("/_system/config/endpoints/registry_endpoint.xml", "application/xml", "xml files",
+//                        setEndpoints(new DataHandler(new URL("file:///" + getESBResourceLocation()
+//                                + "/synapseconfig/send_mediator/endpoints/registry_endpoint.xml"))));
     }
 
-    @AfterClass(alwaysRun = true)
-    private void destroy() throws Exception {
-        resourceAdminServiceStub.deleteResource("/_system/config/endpoints");
-        super.cleanup();
-    }
+//    @AfterClass(alwaysRun = true)
+//    private void destroy() throws Exception {
+//        resourceAdminServiceStub.deleteResource("/_system/config/endpoints");
+//        super.cleanup();
+//    }
 
 }

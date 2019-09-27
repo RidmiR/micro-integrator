@@ -21,12 +21,12 @@ package org.wso2.carbon.esb.mediator.test.enrich.jsonpath;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.spi.json.GsonJsonProvider;
-import com.jayway.jsonpath.spi.json.JsonProvider;
-import com.jayway.jsonpath.spi.mapper.GsonMappingProvider;
-import com.jayway.jsonpath.spi.mapper.MappingProvider;
+//import com.jayway.jsonpath.Configuration;
+//import com.jayway.jsonpath.Option;
+//import com.jayway.jsonpath.spi.json.GsonJsonProvider;
+//import com.jayway.jsonpath.spi.json.JsonProvider;
+//import com.jayway.jsonpath.spi.mapper.GsonMappingProvider;
+//import com.jayway.jsonpath.spi.mapper.MappingProvider;
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -55,7 +55,7 @@ public class EnrichIntegrationJsonPathTestCase extends ESBIntegrationTest {
     @BeforeClass(alwaysRun = true)
     public void uploadSynapseConfig() throws Exception {
         super.init();
-        setJsonPathConfiguration();
+//        setJsonPathConfiguration();
         input = FileUtils.readFileToString(new File(
                 getESBResourceLocation() + File.separator + "json" + File.separator + "enrichSampleInput.json"));
         loadESBConfigurationFromClasspath(
@@ -222,25 +222,25 @@ public class EnrichIntegrationJsonPathTestCase extends ESBIntegrationTest {
     }
 
     //set the basic json configurations so that we can use the gson parser to assert json payloads
-    private void setJsonPathConfiguration() {
-        Configuration.setDefaults(new Configuration.Defaults() {
-
-            private final JsonProvider jsonProvider = new GsonJsonProvider(new GsonBuilder().serializeNulls().create());
-            private final MappingProvider mappingProvider = new GsonMappingProvider();
-
-            public JsonProvider jsonProvider() {
-                return jsonProvider;
-            }
-
-            public MappingProvider mappingProvider() {
-                return mappingProvider;
-            }
-
-            public Set<Option> options() {
-                return EnumSet.noneOf(Option.class);
-            }
-        });
-    }
+//    private void setJsonPathConfiguration() {
+//        Configuration.setDefaults(new Configuration.Defaults() {
+//
+//            private final JsonProvider jsonProvider = new GsonJsonProvider(new GsonBuilder().serializeNulls().create());
+//            private final MappingProvider mappingProvider = new GsonMappingProvider();
+//
+//            public JsonProvider jsonProvider() {
+//                return jsonProvider;
+//            }
+//
+//            public MappingProvider mappingProvider() {
+//                return mappingProvider;
+//            }
+//
+//            public Set<Option> options() {
+//                return EnumSet.noneOf(Option.class);
+//            }
+//        });
+//    }
 
     private void assertEqualJsonObjects(String json1, String json2, String errorMessage) {
         JsonElement element1 = parser.parse(json1);

@@ -41,8 +41,9 @@ public class CloneSmallMessageTestCase extends ESBIntegrationTest {
         client = new CloneClient();
         axis2Server = new SampleAxis2Server("test_axis2_server_9001.xml");
         esbUtils.isProxyServiceExist(contextUrls.getBackEndUrl(), sessionCookie, "CloneAndAggregateTestProxy");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cloningMessagesSeq");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "aggregateMessagesSeq");
+//        TODO: Use Management API's to check the resource exist
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cloningMessagesSeq");
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "aggregateMessagesSeq");
         axis2Server.deployService(SampleAxis2Server.SIMPLE_STOCK_QUOTE_SERVICE);
         axis2Server.start();
 

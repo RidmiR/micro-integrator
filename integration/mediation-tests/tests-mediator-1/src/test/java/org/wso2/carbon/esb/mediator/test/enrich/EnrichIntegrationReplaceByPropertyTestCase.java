@@ -35,9 +35,9 @@ public class EnrichIntegrationReplaceByPropertyTestCase extends ESBIntegrationTe
     @BeforeClass(alwaysRun = true)
     public void uploadSynapseConfig() throws Exception {
         super.init();
-        resourceAdminServiceStub = new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
-                context.getContextTenant().getContextUser().getUserName(),
-                context.getContextTenant().getContextUser().getPassword());
+//        resourceAdminServiceStub = new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
+//                context.getContextTenant().getContextUser().getUserName(),
+//                context.getContextTenant().getContextUser().getPassword());
     }
 
     @Test(groups = { "wso2.esb" }, description = "Enrich mediator replace a part of message define in "

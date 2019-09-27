@@ -79,7 +79,7 @@ public class MessageStoreMessageCleaningTestCase extends ESBIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void close() throws Exception {
-        clear();
+//        clear();
         cleanup();
         messageStoreAdminClient = null;
         context = null;
@@ -120,9 +120,9 @@ public class MessageStoreMessageCleaningTestCase extends ESBIntegrationTest {
     }
 
     // delete the message store
-    public void clear() throws Exception {
-        if (isMessageStoreCreated) {
-            esbUtils.deleteMessageStore(contextUrls.getBackEndUrl(), getSessionCookie(), MESSAGE_STORE_NAME);
-        }
-    }
+//    public void clear() throws Exception {
+//        if (isMessageStoreCreated) {
+//            esbUtils.deleteMessageStore(contextUrls.getBackEndUrl(), getSessionCookie(), MESSAGE_STORE_NAME);
+//        }
+//    }
 }

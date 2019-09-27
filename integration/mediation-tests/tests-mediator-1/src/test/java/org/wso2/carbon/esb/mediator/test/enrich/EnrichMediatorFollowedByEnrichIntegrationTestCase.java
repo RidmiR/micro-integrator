@@ -35,9 +35,9 @@ public class EnrichMediatorFollowedByEnrichIntegrationTestCase extends ESBIntegr
     @BeforeClass(alwaysRun = true)
     public void uploadSynapseConfig() throws Exception {
         super.init();
-        resourceAdminServiceStub = new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
-                context.getContextTenant().getContextUser().getUserName(),
-                context.getContextTenant().getContextUser().getPassword());
+//        resourceAdminServiceStub = new ResourceAdminServiceClient(contextUrls.getBackEndUrl(),
+//                context.getContextTenant().getContextUser().getUserName(),
+//                context.getContextTenant().getContextUser().getPassword());
     }
 
     @Test(groups = { "wso2.esb" }, description = "Enrich mediator followed by enrich mediator")

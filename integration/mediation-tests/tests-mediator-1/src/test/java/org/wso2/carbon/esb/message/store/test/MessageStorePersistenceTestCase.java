@@ -101,7 +101,8 @@ public class MessageStorePersistenceTestCase extends ESBIntegrationTest {
         if (messageStores != null) {
             List list = Arrays.asList(messageStores);
             if (list.contains(MESSAGE_STORE_NAME)) {
-                esbUtils.deleteMessageStore(contextUrls.getBackEndUrl(), getSessionCookie(), MESSAGE_STORE_NAME);
+//                TODO: Uncomment the below once fix the issue : https://github.com/wso2/micro-integrator/issues/858
+//                esbUtils.deleteMessageStore(contextUrls.getBackEndUrl(), getSessionCookie(), MESSAGE_STORE_NAME);
             }
         }
         messageStoreAdminClient = null;

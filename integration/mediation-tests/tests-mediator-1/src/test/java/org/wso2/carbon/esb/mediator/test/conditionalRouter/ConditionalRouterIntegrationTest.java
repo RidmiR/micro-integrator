@@ -55,7 +55,8 @@ public class ConditionalRouterIntegrationTest extends ESBIntegrationTest {
     public void conditionalRouterMediatorWithContinueAfterTrueTest() throws Exception {
         esbUtils.isProxyServiceExist(contextUrls.getBackEndUrl(), sessionCookie,
                 "ConRoutingWithContinueAfterTrueProxy");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd_seq4");
+//        TODO: TODO: Use Management API's to check the resource exist
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd_seq4");
 
         OMElement response = axis2Client
                 .sendSimpleStockQuoteRequest(getProxyServiceURLHttp("ConRoutingWithContinueAfterTrueProxy"), toUrl,
@@ -77,7 +78,8 @@ public class ConditionalRouterIntegrationTest extends ESBIntegrationTest {
     public void conditionalRouterMediatorWithContinueAfterFalseTest() throws Exception {
         esbUtils.isProxyServiceExist(contextUrls.getBackEndUrl(), sessionCookie,
                 "ConRoutingWithContinueAfterFalseProxy");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd_seq5");
+//        TODO:TODO: Use Management API's to check the resource exist
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd_seq5");
 
         OMElement response = axis2Client
                 .sendSimpleStockQuoteRequest(getProxyServiceURLHttp("ConRoutingWithContinueAfterFalseProxy"), toUrl,
@@ -152,8 +154,9 @@ public class ConditionalRouterIntegrationTest extends ESBIntegrationTest {
     public void conditionalRouterMediatorWithBreakRouteTrueTest() throws Exception {
 
         loadESBConfigurationFromClasspath("/artifacts/ESB/synapseconfig/filters/conditional_router/synapse3.xml");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd1_seq");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd2_seq");
+//        TODO: TODO: Use Management API's to check the resource exist
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd1_seq");
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cnd2_seq");
         StockQuoteClient client = new StockQuoteClient();
 
         client.addHttpHeader("foo", "bar");

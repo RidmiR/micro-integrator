@@ -54,8 +54,9 @@ public class CloneBurstTestCase extends ESBIntegrationTest {
         init();
         trigger = new Trigger();
         esbUtils.isProxyServiceExist(contextUrls.getBackEndUrl(), sessionCookie, "CloneAndAggregateTestProxy");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cloningMessagesSeq");
-        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "aggregateMessagesSeq");
+//        TODO: Use Management API's to check the resource exist
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "cloningMessagesSeq");
+//        esbUtils.isSequenceExist(contextUrls.getBackEndUrl(), sessionCookie, "aggregateMessagesSeq");
 
         axis2Server1 = new SampleAxis2Server("test_axis2_server_9001.xml");
         axis2Server2 = new SampleAxis2Server("test_axis2_server_9002.xml");

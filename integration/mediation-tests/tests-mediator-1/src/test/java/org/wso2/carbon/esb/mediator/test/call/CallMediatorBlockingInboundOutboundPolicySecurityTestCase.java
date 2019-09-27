@@ -37,7 +37,8 @@ public class CallMediatorBlockingInboundOutboundPolicySecurityTestCase extends E
     public void setEnvironment() throws Exception {
         super.init();
         verifyProxyServiceExistence("callMediatorBlockingInboundPolicyProxy");
-        verifyLocalEntryExistence("sec_policy_3");
+//        TODO: Use Management API's to check the resource exist
+//        verifyLocalEntryExistence("sec_policy_3");
     }
 
     @Test(groups = {
